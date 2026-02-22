@@ -13,7 +13,7 @@ RUN set -x \
     && mkdir -p "${STEAMAPPDIR}" \
     && chmod +x "${HOMEDIR}/build.sh" \
     && chmod +x "${HOMEDIR}/start-server.sh" \
-    && chown -R "${USER}:${USER}" "${HOMEDIR}/build.sh" "${STEAMAPPDIR}" \
+    && chown -R "${USER}:${USER}" "${HOMEDIR}" "${STEAMAPPDIR}" \
     # Clean up
     && rm -rf /var/lib/apt/lists/*
 
