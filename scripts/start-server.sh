@@ -26,6 +26,5 @@ PARAMS="${PARAMS} -ini:Engine:[EpicOnlineServices]:DedicatedServerClientSecret=$
 PARAMS="${PARAMS} -port=${PORT} -NOSTEAM -log"
 
 echo "Starting Smalland server..."
-echo "${STEAMAPPDIR}/SMALLANDServer.sh ${PARAMS}"
-cd "${STEAMAPPDIR}"
+echo "bash SMALLANDServer.sh ${PARAMS}"
 exec bash SMALLANDServer.sh ${PARAMS}

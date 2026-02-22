@@ -9,4 +9,5 @@ echo "Updating Smalland dedicated server..."
     +quit
 
 echo "Update complete, starting server..."
+cd "${STEAMAPPDIR}"
 exec /bin/bash /home/steam/scripts/start-server.sh
