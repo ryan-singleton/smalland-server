@@ -8,10 +8,13 @@ COPY "scripts/build.sh" "${HOMEDIR}/build.sh"
 COPY "scripts/start-server.sh" "${HOMEDIR}/start-server.sh"
 
 RUN set -x \
+    # Install, update & upgrade packages
     && apt-get update \
     && mkdir -p "${STEAMAPPDIR}" \
-    && chmod +x "${HOMEDIR}/build.sh" "${HOMEDIR}/start-server.sh" \
-    && chown -R "${USER}:${USER}" "${HOMEDIR}" \
+    && chmod +x "${HOMEDIR}/build.sh" \
+    && chmod +x "${HOMEDIR}/start-server.sh" \
+    && chown -R "${USER}:${USER}" "${HOMEDIR}/build.sh" "${STEAMAPPDIR}" \
+    # Clean up
     && rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS bookworm-base
