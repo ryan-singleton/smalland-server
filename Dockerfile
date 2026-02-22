@@ -19,6 +19,9 @@ ENV STEAMAPPID=808040 \
     NOURISHMENTLOSSMODIFIER=100 \
     FALLDAMAGEMODIFIER=100
 
+RUN mkdir -p /home/steam/smalland-dedicated \
+    && chown -R steam:steam /home/steam/smalland-dedicated
+
 COPY --chown=steam:steam scripts/ /home/steam/scripts/
 RUN chmod +x /home/steam/scripts/*.sh
 
