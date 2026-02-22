@@ -1,31 +1,27 @@
-FROM cm2network/steamcmd:latest
+FROM cm2network/steamcmd:root AS build_stage
 
-ENV STEAMAPPID=808040 \
-    STEAMAPPDIR=/home/steam/smalland-dedicated \
-    # Server defaults
-    SERVERNAME="Smalland Server" \
-    WORLDNAME="World" \
-    PASSWORD="" \
-    PORT=7784 \
-    FRIENDLYFIRE=0 \
-    PEACEFULMODE=0 \
-    KEEPINVENTORY=0 \
-    NODETERIORATION=0 \
-    PRIVATE=0 \
-    LENGTHOFDAYSECONDS=1800 \
-    LENGTHOFSEASONSECONDS=10800 \
-    CREATUREHEALTHMODIFIER=100 \
-    CREATUREDAMAGEMODIFIER=100 \
-    NOURISHMENTLOSSMODIFIER=100 \
-    FALLDAMAGEMODIFIER=100
+ENV STEAMAPPID 808040
+ENV STEAMAPP smalland
+ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 
-RUN mkdir -p /home/steam/smalland-dedicated \
-    && chown -R steam:steam /home/steam/smalland-dedicated
+COPY "scripts/build.sh" "${HOMEDIR}/build.sh"
+COPY "scripts/start-server.sh" "${HOMEDIR}/start-server.sh"
 
-COPY --chown=steam:steam scripts/ /home/steam/scripts/
-RUN chmod +x /home/steam/scripts/*.sh
+RUN set -x \
+    # Install, update & upgrade packages
+    && apt-get update \
+    && mkdir -p "${STEAMAPPDIR}" \
+    && chmod +x "${HOMEDIR}/build.sh" \
+    && chmod +x "${HOMEDIR}/start-server.sh" \
+    && chown -R "${USER}:${USER}" "${HOMEDIR}/build.sh" "${STEAMAPPDIR}" \
+    # Clean up
+    && rm -rf /var/lib/apt/lists/*
 
-USER steam
-WORKDIR /home/steam
+FROM build_stage AS bookworm-base
 
-ENTRYPOINT ["/bin/bash", "/home/steam/scripts/entry.sh"]
+# Switch to user
+USER ${USER}
+
+WORKDIR ${HOMEDIR}
+
+CMD ["bash", "build.sh"]
