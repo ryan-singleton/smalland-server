@@ -1,0 +1,24 @@
+services:
+  smalland:
+    image: ghcr.io/ryan-singleton/smalland-server:latest
+    container_name: smalland-server
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./gamedata/smalland:/home/steam/smalland-dedicated
+    environment:
+      - SERVERNAME=Smalland Docker Server
+      - WORLDNAME=World
+      - PASSWORD=YOURPASSWORD
+      - PORT=7777
+      - FRIENDLYFIRE=0
+      - PEACEFULMODE=0
+      - KEEPINVENTORY=0
+      - NODETERIORATION=0
+      - PRIVATE=0
+      - LENGTHOFDAYSECONDS=1800
+      - LENGTHOFSEASONSECONDS=10800
+      - CREATUREHEALTHMODIFIER=100
+      - CREATUREDAMAGEMODIFIER=100
+      - NOURISHMENTLOSSMODIFIER=100
+      - FALLDAMAGEMODIFIER=100
