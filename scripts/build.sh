@@ -1,6 +1,23 @@
 #!/bin/bash
-mkdir -p "${STEAMAPPDIR}" || true
 
-bash "${STEAMCMDDIR}"/steamcmd.sh +force_install_dir "${STEAMAPPDIR}" +login anonymous +app_update "${STEAMAPPID}" validate +quit
-mv -f "${HOMEDIR}"/start-server.sh "${STEAMAPPDIR}"/start-server.sh
-cd "${STEAMAPPDIR}" && ./start-server.sh
+set -e
+
+# ensure directory exists
+mkdir -p "${STEAMAPPDIR}"
+
+# first run: login & app_update
+bash "${STEAMCMDDIR}/steamcmd.sh" +login anonymous \
+  +force_install_dir "${STEAMAPPDIR}" \
+  +app_update "${STEAMAPPID}" \
+  +quit
+
+# second run: ensure files are correct
+bash "${STEAMCMDDIR}/steamcmd.sh" +login anonymous \
+  +force_install_dir "${STEAMAPPDIR}" \
+  +app_update "${STEAMAPPID}" validate \
+  +quit
+
+# move and run
+mv "${HOMEDIR}/start-server.sh" "${STEAMAPPDIR}/start-server.sh"
+cd "${STEAMAPPDIR}"
+exec ./start-server.sh
