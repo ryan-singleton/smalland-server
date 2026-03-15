@@ -6,6 +6,7 @@ ENV STEAMAPPDIR "${HOMEDIR}/${STEAMAPP}-dedicated"
 
 COPY "scripts/build.sh" "${HOMEDIR}/build.sh"
 COPY "scripts/start-server.sh" "${HOMEDIR}/start-server.sh"
+COPY "scripts/entrypoint.sh" "${HOMEDIR}/entrypoint.sh"
 
 RUN set -x \
     # Install, update & upgrade packages
@@ -13,15 +14,16 @@ RUN set -x \
     && mkdir -p "${STEAMAPPDIR}" \
     && chmod +x "${HOMEDIR}/build.sh" \
     && chmod +x "${HOMEDIR}/start-server.sh" \
+    && chmod +x "${HOMEDIR}/entrypoint.sh" \
     && chown -R "${USER}:${USER}" "${HOMEDIR}" "${STEAMAPPDIR}" \
     # Clean up
     && rm -rf /var/lib/apt/lists/*
 
 FROM build_stage AS bookworm-base
 
-# Switch to user
-USER ${USER}
+# Stay as root so entrypoint can chown the bind mount
+USER root
 
 WORKDIR ${HOMEDIR}
 
-CMD ["bash", "build.sh"]
+CMD ["bash", "entrypoint.sh"]
