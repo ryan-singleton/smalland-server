@@ -19,7 +19,7 @@ services:
       - PEACEFULMODE=0
       # Keep inventory on death (0 or 1)
       - KEEPINVENTORY=0
-      # Disable building wather deterioration (0 or 1)
+      # Disable building weather deterioration (0 or 1)
       - NODETERIORATION=0
       # Private server is hidden on the server browser (0 or 1)
       - PRIVATE=0
